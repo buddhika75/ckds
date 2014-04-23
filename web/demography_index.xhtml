@@ -1,0 +1,42 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+
+    <body>
+
+        <ui:composition template="./resources/template/template.xhtml">
+
+            <ui:define name="content">
+                <p:panel header="Manage demography areas">
+                   
+                    <p:commandButton value="Province" action="province" style="width: 230px; margin-right:20px;"  >
+
+                        </p:commandButton>
+                        <p:commandButton value="District" action="district" style="width: 230px; margin-right:20px;" >
+
+                        </p:commandButton>
+                        <p:commandButton value="MOH area" action="moh_area" style="width: 230px; margin-right:20px;" >
+
+                        </p:commandButton>
+                          <p:commandButton value="PHI area" action="phi_area" style="width: 230px; margin-right:20px;" >
+
+                        </p:commandButton>
+                        <p:commandButton value="PHM area" action="phm_area" style="width: 230px; margin-right:20px;" >
+
+                        </p:commandButton>
+
+
+                   
+
+                </p:panel>
+
+            </ui:define>
+
+
+
+        </ui:composition>
+
+    </body>
+</html>

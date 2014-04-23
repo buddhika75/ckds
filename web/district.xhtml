@@ -1,0 +1,153 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
+                template="./resources/template/template.xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:p="http://primefaces.org/ui">
+
+
+    <ui:define name="content">
+
+        <h:panelGroup >
+            <h:form  >
+                <p:growl autoUpdate="true" />
+                <p:focus id="selectFocus" context="gpSelect" />
+                <p:focus id="detailFocus" context="gpDetail" />
+
+
+
+                <p:panel header="Manage District" >
+                    <h:panelGrid id ="gpVeda" columns="3" >
+
+                        <h:panelGrid id="gpSelect" columns="1"  >
+                            <p:panel >
+                                <h:panelGrid id="gpSelectText" >
+                                    <h:selectOneListbox converter="phiCon"  id="lstSelect"   size="10" value="#{districtController.current}" style="min-width: 223px">
+                                        <f:selectItems  value="#{districtController.items}" var="yItem" itemValue="#{yItem}" itemLabel="#{yItem.name}" ></f:selectItems>
+                                        <f:ajax render="gpDetail mp " execute="lstSelect" >
+                                        </f:ajax>
+                                    </h:selectOneListbox>
+                                    <h:commandButton id="butViewMap" value="View in Map" styleClass="buttons">
+                                    </h:commandButton>
+                                </h:panelGrid>
+
+                            </p:panel>
+                            <p:panel id="Map" rendered="#{sessionController.loggedUser.staff.staffRole eq 'Pdhs'or sessionController.loggedUser.staff.staffRole eq 'Rdhs'or sessionController.loggedUser.staff.staffRole eq 'Admin' }">
+
+                                <h:panelGrid id="gpSelectButtons" columns="3"  >
+                                    <h:commandButton id="btnAdd" value="Add"  action="#{districtController.prepareAdd()}" styleClass="buttons" >
+                                        <f:ajax render="btnAdd  btnDelete btnSave   lstSelect gpDetail detailFocus" execute="" >
+                                        </f:ajax>
+                                    </h:commandButton>
+                                    <h:commandButton id="btnDelete" onclick="if (!confirm('Are you sure you want to delete this record?'))
+                                                return false;" action="#{districtController.delete()}"  value="Delete"  >
+                                    </h:commandButton>
+                                </h:panelGrid>
+                            </p:panel>
+                        </h:panelGrid  >
+
+                        <p:panel rendered="#{sessionController.loggedUser.staff.staffRole eq 'Pdhs'or sessionController.loggedUser.staff.staffRole eq 'Rdhs'or sessionController.loggedUser.staff.staffRole eq 'Admin' }">
+                            <h:panelGrid id="gpDetail" columns="1">
+                                <h:panelGrid id="gpDetailText" columns="2" >
+
+                                    <h:outputText id="lblName" value="Name" ></h:outputText>
+                                    <h:inputText id="txtName" value="#{districtController.current.name}"  ></h:inputText>
+
+                                    <h:outputText id="lblprovince" value="Province" ></h:outputText>
+                                    <p:selectOneMenu converter="provinceCon" id="cmbHf" value="#{districtController.current.superArea}"  >
+                                        <f:selectItem itemLabel="Please select a province" />
+                                        <f:selectItems  value="#{provinceController.items}" var="p" itemValue="#{p}" itemLabel="#{p.name}" ></f:selectItems>
+
+                                    </p:selectOneMenu>
+
+                                </h:panelGrid>
+                                <h:panelGrid id="gpDetailButtons" columns="2">
+                                    <h:commandButton id="btnSave" value="Save"  action="#{districtController.saveSelected()}" styleClass="buttons">
+                                        <f:ajax render="btnAdd  btnDelete btnSave   lstSelect gpDetail gpDetailText selectFocus"  execute="gpDetail" >
+                                        </f:ajax>
+                                    </h:commandButton>
+
+                                </h:panelGrid>
+                            </h:panelGrid>
+                        </p:panel>
+                      
+                        <p:panel rendered="#{districtController.current.id ne 0 or districtController.current.id ne null }" >
+
+  <p:gmap id="gmap" rendered="#{districtController.current.cordinates.size()>0}" center="#{districtController.current.cordinates.get(0).latitude}, #{districtController.current.cordinates.get(0).longtide}" zoom="13" type="HYBRID" style="width:600px;height:400px" model="#{districtController.mapModel}">  
+                        </p:gmap>
+
+                            <p:panel header="Coordinates" id="mp" rendered="#{sessionController.loggedUser.staff.staffRole eq 'Pdhs'or sessionController.loggedUser.staff.staffRole eq 'Rdhs'or sessionController.loggedUser.staff.staffRole eq 'Admin' }">
+
+                                <p:panelGrid >
+                                    <p:row >
+                                        <p:column >
+                                            <h:outputLabel value="Longitude" />
+                                        </p:column>
+                                        <p:column >
+                                            <h:inputText value="#{districtController.coordinate.longtide}" ></h:inputText>
+                                        </p:column>
+                                    </p:row>
+                                    <p:row >
+                                        <p:column >
+                                            <h:outputLabel value="Latitude" />
+                                        </p:column>
+                                        <p:column >
+                                            <h:inputText value="#{districtController.coordinate.latitude}" ></h:inputText>
+                                        </p:column>
+                                    </p:row>
+                                    <p:row >
+                                        <p:column >
+                                            <h:outputLabel value="Order No" />
+                                        </p:column>
+                                        <p:column >
+                                            <h:inputText value="#{districtController.coordinate.orderNo}" ></h:inputText>
+                                        </p:column>
+                                    </p:row>
+                                    <p:row >
+                                        <p:column >
+                                            <p:commandButton ajax="false" value="Add" action="#{districtController.addCoordinate()}"  >
+
+                                            </p:commandButton>
+                                        </p:column>
+                                    </p:row>
+
+                                    <p:row >
+                                        <p:column >
+                                            <p:dataTable value="#{districtController.current.cordinates}" var="c" >
+                                                <p:column >
+                                                    #{c.latitude}
+                                                </p:column>
+                                                <p:column >
+                                                    #{c.longtide}
+                                                </p:column>
+                                                <p:column >
+                                                    #{c.orderNo}
+                                                </p:column>
+                                                <p:column >
+                                                    <p:commandButton ajax="false" value="Remove" action="#{districtController.removeCoordinate() }" >
+                                                        <f:setPropertyActionListener value="#{c}" target="#{districtController.coordinate}" />
+                                                    </p:commandButton>
+                                                </p:column>
+                                            </p:dataTable>
+                                        </p:column>
+                                    </p:row>
+
+
+                                </p:panelGrid>
+                            </p:panel>
+
+
+                        </p:panel>
+
+
+                    </h:panelGrid>
+                </p:panel>
+            </h:form>
+
+        </h:panelGroup>
+
+    </ui:define>
+
+</ui:composition>

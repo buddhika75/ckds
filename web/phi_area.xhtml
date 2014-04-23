@@ -1,0 +1,147 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
+                template="./resources/template/template.xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:p="http://primefaces.org/ui">
+
+
+    <ui:define name="content">
+
+        <h:panelGroup >
+            <h:form  >
+                <p:growl autoUpdate="true" />
+                <p:focus id="selectFocus" context="gpSelect" />
+                <p:focus id="detailFocus" context="gpDetail" />
+
+
+
+                <p:panel header="Manage PHI area" >
+                    <h:panelGrid id ="gpVeda" columns="3" >
+
+                        <h:panelGrid id="gpSelect" columns="1"  >
+                            <p:panel >
+                                <h:panelGrid id="gpSelectText" >
+                                    <h:selectOneListbox converter="phiCon"  id="lstSelect"   size="10" value="#{phiController.current}" style="min-width: 223px">
+                                        <f:selectItems  value="#{phiController.items}" var="myItem" itemValue="#{myItem}" itemLabel="#{myItem.name}" ></f:selectItems>
+                                        <f:ajax render="gpDetail map ph" execute="lstSelect" >
+                                        </f:ajax>
+                                    </h:selectOneListbox>
+                                     <h:commandButton id="butViewMap" value="View in Map" styleClass="buttons">
+                                    </h:commandButton>
+                               
+                                </h:panelGrid>
+                            </p:panel>
+                            <p:panel id="aa" rendered="#{sessionController.loggedUser.staff.staffRole eq 'Pdhs'or sessionController.loggedUser.staff.staffRole eq 'Rdhs'or sessionController.loggedUser.staff.staffRole eq 'Admin' }">
+                                <h:panelGrid id="gpSelectButtons" columns="3"  >
+                                    <h:commandButton id="btnAdd" value="Add"  action="#{phiController.prepareAdd()}" styleClass="buttons" >
+                                        <f:ajax render="btnAdd  btnDelete btnSave   lstSelect gpDetail detailFocus" execute="" >
+                                        </f:ajax>
+                                    </h:commandButton>
+                                    <h:commandButton id="btnDelete" onclick="if (!confirm('Are you sure you want to delete this record?'))
+                                                return false;" action="#{phiController.delete()}"  value="Delete"  >
+                                    </h:commandButton>
+                                </h:panelGrid>
+                            </p:panel>
+                        </h:panelGrid  >
+
+                        <p:panel id="c" rendered="#{sessionController.loggedUser.staff.staffRole eq 'Pdhs'or sessionController.loggedUser.staff.staffRole eq 'Rdhs'or sessionController.loggedUser.staff.staffRole eq 'Admin' }">
+                            <h:panelGrid id="gpDetail" columns="1">
+                                <h:panelGrid id="gpDetailText" columns="2">
+                                     <h:outputText id="lblphi" value="MOH area" ></h:outputText>
+                                     <p:selectOneMenu converter="mohCon" id="cmbHf" value="#{phiController.current.superArea}"  >
+                                        <f:selectItem itemLabel="Please select a MOH area" />
+                                        <f:selectItems  value="#{mohController.items}" var="mo" itemValue="#{mo}" itemLabel="#{mo.name}" ></f:selectItems>
+
+                                    </p:selectOneMenu>
+                                    <h:outputText id="lblName" value="Name" ></h:outputText>
+                                    <h:inputText id="txtName" value="#{phiController.current.name}"  ></h:inputText>
+
+                                </h:panelGrid>
+                                <h:panelGrid id="gpDetailButtons" columns="2">
+                                    <h:commandButton id="btnSave" value="Save"  action="#{phiController.saveSelected()}" styleClass="buttons">
+                                        <f:ajax render="btnAdd  btnDelete btnSave   lstSelect gpDetail selectFocus"  execute="gpDetail" >
+                                        </f:ajax>
+                                    </h:commandButton>
+
+                                </h:panelGrid>
+                            </h:panelGrid>
+                        </p:panel>
+
+                        <p:panel rendered="#{phiController.current.id ne 0 or phiController.current.id ne null }" >
+                        <p:gmap id="map" rendered="#{phiController.current.cordinates.size()>0}" center="#{phiController.current.cordinates.get(0).latitude}, #{phiController.current.cordinates.get(0).longtide}" zoom="13" type="HYBRID" style="width:600px;height:400px" model="#{phiController.mapModel}">  
+                                            </p:gmap>
+                            <p:panel header="Coordinates" rendered="#{sessionController.loggedUser.staff.staffRole eq 'Pdhs'or sessionController.loggedUser.staff.staffRole eq 'Rdhs'or sessionController.loggedUser.staff.staffRole eq 'Admin' }" >
+                                <p:panelGrid id="ph">
+                                    <p:row >
+                                        <p:column >
+                                            <h:outputLabel value="Longitude" />
+                                        </p:column>
+                                        <p:column >
+                                            <h:inputText value="#{phiController.coordinate.longtide}" ></h:inputText>
+                                        </p:column>
+                                    </p:row>
+                                    <p:row >
+                                        <p:column >
+                                            <h:outputLabel value="Latitude" />
+                                        </p:column>
+                                        <p:column >
+                                            <h:inputText value="#{phiController.coordinate.latitude}" ></h:inputText>
+                                        </p:column>
+                                    </p:row>
+                                    <p:row >
+                                        <p:column >
+                                            <h:outputLabel value="Order No" />
+                                        </p:column>
+                                        <p:column >
+                                            <h:inputText value="#{phiController.coordinate.orderNo}" ></h:inputText>
+                                        </p:column>
+                                    </p:row>
+                                    <p:row >
+                                        <p:column >
+                                            <p:commandButton ajax="false" value="Add" action="#{phiController.addCoordinate()}"  >
+
+                                            </p:commandButton>
+                                        </p:column>
+                                    </p:row>
+
+                                    <p:row >
+                                        <p:column >
+                                            <p:dataTable value="#{phiController.current.cordinates}" var="c" >
+                                                <p:column >
+                                                    #{c.latitude}
+                                                </p:column>
+                                                <p:column >
+                                                    #{c.longtide}
+                                                </p:column>
+                                                <p:column >
+                                                    #{c.orderNo}
+                                                </p:column>
+                                                <p:column >
+                                                    <p:commandButton ajax="false" value="Remove" action="#{phiController.removeCoordinate() }" >
+                                                        <f:setPropertyActionListener value="#{c}" target="#{phiController.coordinate}" />
+                                                    </p:commandButton>
+                                                </p:column>
+                                            </p:dataTable>
+                                        </p:column>
+                                    </p:row>
+                                    
+
+                                </p:panelGrid>
+                            </p:panel>
+
+          
+                        </p:panel>
+
+
+                    </h:panelGrid>
+                </p:panel>
+            </h:form>
+
+        </h:panelGroup>
+
+    </ui:define>
+
+</ui:composition>
