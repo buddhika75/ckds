@@ -4,6 +4,7 @@ package gov.sp.health.entity;
 import gov.sp.health.data.Sex;
 import gov.sp.health.data.Title;
 import java.io.Serializable;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.CascadeType;
@@ -73,6 +74,24 @@ public class Person implements Serializable {
     @ManyToOne(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
     Family family;
 
+    int age;
+
+    public int getAge() {
+        return age;
+    }
+
+    public void setAge(int age) {
+        if(dob==null){
+            Calendar c = Calendar.getInstance();
+            c.set(Calendar.YEAR, c.get(Calendar.YEAR) - age);
+            dob=c.getTime();
+        }
+        this.age = age;
+    }
+    
+    
+    
+    
     public Family getFamily() {
         return family;
     }

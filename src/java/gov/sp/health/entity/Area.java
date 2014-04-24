@@ -8,7 +8,6 @@ import gov.sp.health.data.AreaComparator;
 import gov.sp.health.data.AreaType;
 import java.io.Serializable;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.CascadeType;

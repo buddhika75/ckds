@@ -39,59 +39,22 @@
                                 </f:facet>  
                             </p:ajaxStatus>
                             <p:menubar styleClass="nonPrintBlock" style=" border: 0px;" rendered="#{sessionController.logged}" >
-                                <p:menuitem ajax="false" action="index" value="#{labels.topic}"  ></p:menuitem>
-                                <p:menuitem ajax="false" action="index" value="||"  ></p:menuitem>
-                                <p:submenu label="Health Forms ||"  >
-                                    <p:menuitem  ajax="false"  action="fill_new_form" value="#{labels.home}"  ></p:menuitem>
-                                    <p:menuitem  ajax="false"  action="lab_bill_collecting_centre" value="Consolidate Forms"  ></p:menuitem>
-                                    <p:menuitem  ajax="false"  action="approve_filled_forms" value="Approve Filled Forms"  ></p:menuitem>
-                                    <p:menuitem  ajax="false"  action="recently_submitted_forms.xhtml" value="Forward Forms"  ></p:menuitem>
-                                    <p:menuitem  ajax="false"  action="graph_health_form" value="Analysis"  ></p:menuitem>
+                                <p:submenu label="Data"  >
+                                    <p:menuitem  ajax="false"  action="fill_new_form" value="Add New Record"  ></p:menuitem>
+                                </p:submenu>
+                                <p:submenu label="User"  >
+                                    <p:menuitem  ajax="false"  action="user_change_password" value="Change Password"  ></p:menuitem>
+                                    <p:menuitem  ajax="false"  action="user_preferances" value="Change Preferances"  ></p:menuitem>
+                                </p:submenu>
+                                <p:submenu label="Administration"  >
+                                    <p:menuitem  ajax="false"  action="occupation" value="Manage Occupations"  ></p:menuitem>
+                                    <p:menuitem  ajax="false"  action="institution" value="Manage Institutions"  ></p:menuitem>
+                                    <p:menuitem  ajax="false"  action="admin_manage_users" value="Manage Users"  ></p:menuitem>
+                                    <p:menuitem  ajax="false"  action="area" value="Manage Areas"  ></p:menuitem>
+                                    <p:menuitem  ajax="false"  action="area" value="Manage Diagnosis"  ></p:menuitem>
+
                                 </p:submenu>
 
-                                <p:menuitem  ajax="false"  action="demography_index" value="#{labels.demog} ||"  ></p:menuitem>
-
-                                
-                                    <p:menuitem  ajax="false"  action="#{familyController.listFamilies()}" value="Manage Families ||"  ></p:menuitem>
-                               
-
-
-                                    <p:menuitem  ajax="false"  action="diagnosis" value="Manage diagnosis ||"  ></p:menuitem>
-                                
-
-
-                                <p:submenu label="Messsage center ||"  >
-                                    <p:submenu label="Messsage Inbox"  >
-                                        <p:menuitem  ajax="false"  action="myMessage" value="Personal"  ></p:menuitem>
-                                        <p:menuitem  ajax="false"  action="staffMessage" value="Staff"  ></p:menuitem>
-                                        <p:menuitem  ajax="false"  action="areaMessage" value="Area"  ></p:menuitem>
-                                    </p:submenu>
-                                    <p:submenu label="Create Messsage"  >
-                                        <p:menuitem  ajax="false"  action="new_message" value="To persoon"  ></p:menuitem>
-                                        <p:menuitem  ajax="false"  action="new_message_staff" value="To staff"  ></p:menuitem>
-                                        <p:menuitem  ajax="false"  action="new_message_area" value="To Area"  ></p:menuitem>
-
-
-                                    </p:submenu>
-                                </p:submenu>
-
-                                <p:submenu label="GISMap"  >
-                                    <p:menuitem  ajax="false"  action="gis_map" value="GIS Map"  ></p:menuitem>
-                                </p:submenu>
-                            
-
-                            <p:submenu label="User ||"  >
-                                <p:menuitem  ajax="false"  action="user_change_password" value="Change Password"  ></p:menuitem>
-                                <p:menuitem  ajax="false"  action="user_preferances" value="Change Preferances"  ></p:menuitem>
-                            </p:submenu>
-
-                            <p:menuitem  ajax="false"  action="instituteMenu" value="Manage Institutions ||"  ></p:menuitem>
-
-                            <p:submenu label="Administration ||"  >
-                                <p:menuitem  ajax="false"  action="admin_manage_users" value="Manage Users"  ></p:menuitem>
-                                <p:menuitem  ajax="false"  action="administration" value="Manage Forms"  ></p:menuitem>
-                            </p:submenu>
-                            
                             </p:menubar>
 
 

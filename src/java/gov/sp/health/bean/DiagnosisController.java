@@ -77,6 +77,18 @@ public class DiagnosisController implements Serializable {
         this.itemFacade = itemFacade;
     }
 
+    public List<Diagnosis> completeDx(String query) {
+        List<Diagnosis> suggestions;
+        String sql;
+        if (query == null) {
+            suggestions = new ArrayList<Diagnosis>();
+        } else {
+            sql = "select c from Diagnosis  c where c.retired=false and upper(c.name) like '%" + query.toUpperCase() + "%' order by c.name";
+            System.out.println(sql);
+            suggestions = getEjbFacade().findBySQL(sql);
+        }
+        return suggestions;
+    }
     
 
     public List<Diagnosis> completeInvest(String query) {

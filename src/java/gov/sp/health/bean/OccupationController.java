@@ -1,8 +1,7 @@
 package gov.sp.health.bean;
 
-import gov.sp.health.data.AreaType;
-import gov.sp.health.facade.AreaFacade;
-import gov.sp.health.entity.Area;
+import gov.sp.health.facade.OccupationFacade;
+import gov.sp.health.entity.Occupation;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -21,67 +20,40 @@ import javax.faces.convert.FacesConverter;
 
 @Named
 @SessionScoped
-public class AreaController implements Serializable {
+public class OccupationController implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Inject
     SessionController sessionController;
     @EJB
-    private AreaFacade ejbFacade;
-    List<Area> selectedItems;
-    private Area current;
-    private List<Area> items = null;
+    private OccupationFacade ejbFacade;
+    List<Occupation> selectedItems;
+    private Occupation current;
+    private List<Occupation> items = null;
     String selectText = "";
 
-    public List<Area> getSelectedItems() {
-        selectedItems = getFacade().findBySQL("select c from Area c where c.retired=false and upper(c.name) like '%" + getSelectText().toUpperCase() + "%' order by c.name");
+    public List<Occupation> getSelectedItems() {
+        selectedItems = getFacade().findBySQL("select c from Occupation c where c.retired=false and upper(c.name) like '%" + getSelectText().toUpperCase() + "%' order by c.name");
         return selectedItems;
     }
 
-    public List<Area> completeArea(String qry) {
-        List<Area> a = null;
+    public List<Occupation> completeOccupation(String qry) {
+        List<Occupation> a = null;
         if (qry != null) {
-            a = getFacade().findBySQL("select c from Area c where c.retired=false and upper(c.name) like '%" + qry.toUpperCase() + "%' order by c.name");
+            a = getFacade().findBySQL("select c from Occupation c where c.retired=false and upper(c.name) like '%" + qry.toUpperCase() + "%' order by c.name");
         }
         if (a == null) {
-            a = new ArrayList<Area>();
+            a = new ArrayList<Occupation>();
         }
         return a;
     }
 
-    public List<Area> completeArea(String qry, AreaType at) {
-        if (qry == null || qry.trim().equals("")) {
-            return new ArrayList<Area>();
-        }
-        List<Area> a = null;
-        Map m = new HashMap();
-        m.put("n", "%" + qry.toUpperCase() + "%");
-        m.put("at", at);
-        return getFacade().findBySQL("select c from Area c where c.retired=false and upper(c.name) like :n and c.areaType=:at order by c.name");
-
-    }
-
-    public List<Area> completeRdhsArea(String qry) {
-        return completeArea(qry, AreaType.District);
-    }
-
-    public List<Area> completePhiArea(String qry) {
-        return completeArea(qry, AreaType.PhiArea);
-    }
-
-    public List<Area> completePhmArea(String qry) {
-        return completeArea(qry, AreaType.PhmArea);
-    }
-
-    public List<Area> completeMohArea(String qry) {
-        return completeArea(qry, AreaType.MohArea);
-    }
 
     public void prepareAdd() {
-        current = new Area();
+        current = new Occupation();
     }
 
-    public void setSelectedItems(List<Area> selectedItems) {
+    public void setSelectedItems(List<Occupation> selectedItems) {
         this.selectedItems = selectedItems;
     }
 
@@ -112,11 +84,11 @@ public class AreaController implements Serializable {
         this.selectText = selectText;
     }
 
-    public AreaFacade getEjbFacade() {
+    public OccupationFacade getEjbFacade() {
         return ejbFacade;
     }
 
-    public void setEjbFacade(AreaFacade ejbFacade) {
+    public void setEjbFacade(OccupationFacade ejbFacade) {
         this.ejbFacade = ejbFacade;
     }
 
@@ -128,17 +100,14 @@ public class AreaController implements Serializable {
         this.sessionController = sessionController;
     }
 
-    public AreaController() {
+    public OccupationController() {
     }
 
-    public Area getCurrent() {
-        if(current==null){
-            current= new Area();
-        }
+    public Occupation getCurrent() {
         return current;
     }
 
-    public void setCurrent(Area current) {
+    public void setCurrent(Occupation current) {
         this.current = current;
     }
 
@@ -169,11 +138,11 @@ public class AreaController implements Serializable {
 
     }
 
-    private AreaFacade getFacade() {
+    private OccupationFacade getFacade() {
         return ejbFacade;
     }
 
-    public List<Area> getItems() {
+    public List<Occupation> getItems() {
         items = getFacade().findAll("name", true);
         return items;
     }
@@ -181,16 +150,16 @@ public class AreaController implements Serializable {
     /**
      *
      */
-    @FacesConverter("areaCon")
-    public static class AreaControllerConverter implements Converter {
+    @FacesConverter("occupationCon")
+    public static class OccupationControllerConverter implements Converter {
 
         @Override
         public Object getAsObject(FacesContext facesContext, UIComponent component, String value) {
             if (value == null || value.length() == 0) {
                 return null;
             }
-            AreaController controller = (AreaController) facesContext.getApplication().getELResolver().
-                    getValue(facesContext.getELContext(), null, "areaController");
+            OccupationController controller = (OccupationController) facesContext.getApplication().getELResolver().
+                    getValue(facesContext.getELContext(), null, "occupationController");
             return controller.getEjbFacade().find(getKey(value));
         }
 
@@ -220,12 +189,12 @@ public class AreaController implements Serializable {
             if (object == null) {
                 return null;
             }
-            if (object instanceof Area) {
-                Area o = (Area) object;
+            if (object instanceof Occupation) {
+                Occupation o = (Occupation) object;
                 return getStringKey(o.getId());
             } else {
                 throw new IllegalArgumentException("object " + object + " is of type "
-                        + object.getClass().getName() + "; expected type: " + AreaController.class.getName());
+                        + object.getClass().getName() + "; expected type: " + OccupationController.class.getName());
             }
         }
     }

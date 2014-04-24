@@ -1,0 +1,152 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <body>
+
+        <ui:composition template="./resources/template/template.xhtml">
+
+            <ui:define name="content">
+                <h:form >
+                    <p:panel >
+                        <f:facet name="header" >
+                            <h:outputLabel value="Chronic Kidney Disease Register" >
+                            </h:outputLabel>
+                            <p:commandButton ajax="false" action="#{ckdRecordController.saveAndAddGis()}" value="Save and Add GIS" ></p:commandButton>
+                        </f:facet>
+                        <p:panelGrid columns="6" >
+                            <h:outputLabel value="RDHS Division" ></h:outputLabel>
+                            <p:autoComplete id="acRdhs"
+                                            value="#{ckdRecordController.rdhsArea}"
+                                            completeMethod="#{areaController.completeRdhsArea}"
+                                            var="rdhs"
+                                            itemLabel="#{rdhs.name}"
+                                            itemValue="#{rdhs}" >
+                            </p:autoComplete>
+                            <p:spacer width="50" ></p:spacer>
+                            <p:spacer width="50" ></p:spacer>
+                            <h:outputLabel value="Year/Month" ></h:outputLabel>
+                            <p:calendar value="#{ckdRecordController.recordDate}" pattern="dd MMMM yyyy" ></p:calendar>
+                            <h:outputLabel value="Institution" ></h:outputLabel>
+                            <p:selectOneMenu value="#{ckdRecordController.institution}" >
+                                <f:selectItem itemLabel="Select Institution" ></f:selectItem>
+                                <f:selectItems value="#{institutionController.items}" var="ins" itemLabel="#{ins.name}" itemValue="#{ins}" ></f:selectItems>
+                            </p:selectOneMenu>
+                        </p:panelGrid>
+
+
+
+                        <p:panelGrid columns="2" >
+                            <h:outputLabel value="Clinic Register No"></h:outputLabel>
+                            <h:inputText value="#{ckdRecordController.current.clinicRegistrationNumber}" ></h:inputText>
+                            <h:outputLabel value="Old or New (Check if this is a new case)" ></h:outputLabel>
+                            <p:selectBooleanCheckbox value="#{ckdRecordController.current.newCase}" ></p:selectBooleanCheckbox>
+                            <h:outputLabel value="NIC No"></h:outputLabel>
+                            <h:inputText value="#{ckdRecordController.current.nic}" ></h:inputText>
+                            <h:outputLabel value="Name"></h:outputLabel>
+                            <h:inputText value="#{ckdRecordController.current.person.name}" ></h:inputText>
+                            <h:outputLabel value="Age"></h:outputLabel>
+                            <h:inputText value="#{ckdRecordController.current.person.age}" ></h:inputText>
+                            <h:outputLabel value="Sex"></h:outputLabel>
+                            <h:selectOneMenu value="#{ckdRecordController.current.person.sex}" >
+                                <f:selectItems value="#{enumController.sexValues}" ></f:selectItems>
+                            </h:selectOneMenu>
+                            <h:outputLabel value="Address"></h:outputLabel>
+                            <h:inputTextarea value="#{ckdRecordController.current.person.address}" ></h:inputTextarea>
+                            <h:outputLabel value="Occuptions"></h:outputLabel>
+                            <h:panelGroup >
+                                <h:panelGroup >
+                                    <p:autoComplete value="#{ckdRecordController.occupation}"
+                                                    completeMethod="#{occupationController.completeOccupation}"
+                                                    var="occ"
+                                                    id="acOcc"
+                                                    itemLabel="#{occ.name}"
+                                                    itemValue="#{occ}"
+                                                    forceSelection="true"></p:autoComplete>
+                                    <p:commandButton value="Add" id="btnAddOcc"
+                                                     process="acOcc"
+                                                     update="tblOcc" >
+                                    </p:commandButton>
+                                </h:panelGroup>
+                                <h:panelGroup >
+                                    <p:dataTable id="tblOcc" value="#{ckdRecordController.current.occupations}" 
+                                                 var="ptOcc" >
+                                        <p:column >
+                                            <h:outputLabel value="#{ptOcc.name}" ></h:outputLabel>
+                                        </p:column>
+                                    </p:dataTable>
+                                </h:panelGroup>
+                            </h:panelGroup>
+
+                            <h:outputLabel value="MOH Area"></h:outputLabel>
+                            <p:autoComplete id="acMoh"
+                                            value="#{ckdRecordController.rdhsArea}"
+                                            completeMethod="#{areaController.completeMohArea}"
+                                            var="moh"
+                                            itemLabel="#{moh.name}"
+                                            itemValue="#{moh}" >
+                            </p:autoComplete>
+
+                            <h:outputLabel value="PHI Area"></h:outputLabel>
+                            <p:autoComplete id="acPhi"
+                                            value="#{ckdRecordController.rdhsArea}"
+                                            completeMethod="#{areaController.completeMohArea}"
+                                            var="moh"
+                                            itemLabel="#{moh.name}"
+                                            itemValue="#{moh}" >
+                            </p:autoComplete>
+
+
+
+                            <h:outputLabel value="Co-morbidities"></h:outputLabel>
+                            <h:panelGroup >
+                                <h:panelGroup >
+                                    <p:autoComplete value="#{ckdRecordController.coormobidity}"
+                                                    completeMethod="#{diagnosisController.completeDx}"
+                                                    var="cm"
+                                                    id="acCm"
+                                                    itemLabel="#{cm.name}"
+                                                    itemValue="#{cm}"
+                                                    forceSelection="true"></p:autoComplete>
+                                    <p:commandButton value="Add" id="btnAddDx"
+                                                     process="acCm"
+                                                     update="tblCm" >
+                                    </p:commandButton>
+                                </h:panelGroup>
+                                <h:panelGroup >
+                                    <p:dataTable id="tblCm" value="#{ckdRecordController.current.occupations}" 
+                                                 var="ptCm" >
+                                        <p:column >
+                                            <h:outputLabel value="#{ptDx.name}" ></h:outputLabel>
+                                        </p:column>
+                                    </p:dataTable>
+                                </h:panelGroup>
+                            </h:panelGroup>
+
+                            <h:outputLabel value="Diagnosis"></h:outputLabel>
+                            <p:autoComplete value="#{ckdRecordController.current.diagnosis}"
+                                            completeMethod="#{diagnosisController.completeDx}"
+                                            var="dx"
+                                            id="acDx"
+                                            itemLabel="#{dx.name}"
+                                            itemValue="#{dx}"
+                                            forceSelection="true">
+                            </p:autoComplete>
+
+                        </p:panelGrid>
+
+
+                    </p:panel>
+
+                </h:form>
+
+            </ui:define>
+
+        </ui:composition>
+
+    </body>
+</html>
