@@ -41,6 +41,9 @@ public class Category implements Serializable {
     Long longValue;
     @ManyToOne
     Category parentCategory;
+    String code;
+    @Lob
+    String comments;
    
     @OneToMany(mappedBy = "category")
     private List<Item> items;
@@ -209,4 +212,24 @@ public class Category implements Serializable {
     public void setItems(List<Item> items) {
         this.items = items;
     }
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
+
+    public String getComments() {
+        return comments;
+    }
+
+    public void setComments(String comments) {
+        this.comments = comments;
+    }
+    
+
+    
+    
 }

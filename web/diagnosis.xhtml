@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
-                 template="./resources/template/template.xhtml"
+                template="./resources/template/template.xhtml"
                 xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:f="http://java.sun.com/jsf/core"
                 xmlns="http://www.w3.org/1999/xhtml"
@@ -18,7 +18,7 @@
 
 
 
-                <p:panel header="Manage Disease" >
+                <p:panel header="Manage Diagnoses" >
                     <h:panelGrid id ="gpVeda" columns="2" >
 
                         <h:panelGrid id="gpSelect" columns="1"  >
@@ -32,7 +32,7 @@
                                 </h:panelGrid>
                                 <h:panelGrid id="gpSelectButtons" columns="3"  >
                                     <h:commandButton id="btnAdd" value="Add"  action="#{diagnosisController.prepareAdd()}" styleClass="buttons" >
-                                        <f:ajax render="btnAdd  btnDelete btnSave   lstSelect gpDetail detailFocus" execute="" >
+                                        <f:ajax render="gpDetail detailFocus lstSelect" execute="btnAdd" >
                                         </f:ajax>
                                     </h:commandButton>
                                     <h:commandButton id="btnDelete" onclick="if (!confirm('Are you sure you want to delete this record?'))
@@ -47,22 +47,14 @@
                                 <h:panelGrid id="gpDetailText" columns="2">
                                     <h:outputText id="lblCode" value="Name" ></h:outputText>
                                     <h:inputText id="txtCode" value="#{diagnosisController.current.name}"  ></h:inputText>
-                                     <h:outputText id="lblName" value="Code" ></h:outputText>
-                                     <h:inputText id="txtName" value="#{diagnosisController.current.code}"  ></h:inputText>
-                                     <h:outputText id="lblDes" value="Descreption" ></h:outputText>
-                                     <h:inputTextarea id="txtDese" value="#{diagnosisController.current.comments }"  ></h:inputTextarea>
-                                    
+                                    <h:outputText id="lblName" value="Code" ></h:outputText>
+                                    <h:inputText id="txtName" value="#{diagnosisController.current.code}"  ></h:inputText>
+                                    <h:outputText id="lblDes" value="Descreption" ></h:outputText>
+                                    <h:inputTextarea id="txtDese" value="#{diagnosisController.current.comments}"  ></h:inputTextarea>
                                 </h:panelGrid>
                                 <h:panelGrid id="gpDetailButtons" columns="2">
                                     <h:commandButton id="btnSave" value="Save"  action="#{diagnosisController.saveSelected()}" styleClass="buttons">
-                                        <f:ajax render="btnAdd  btnDelete btnSave   lstSelect gpDetail selectFocus"  execute="gpDetail" >
-                                        </f:ajax>
                                     </h:commandButton>
-                                    
-                                    <p:commandButton ajax="false" value="Add GIS" action="disease_mark_new" >
-                                        <f:setPropertyActionListener target="#{diagnosisController.current}" value="#{ff}" />
-                                    </p:commandButton>
-
                                 </h:panelGrid>
                             </h:panelGrid>
                         </p:panel>

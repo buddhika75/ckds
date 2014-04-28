@@ -20,7 +20,7 @@
                         </f:facet>
                         <p:panelGrid columns="6" >
                             <h:outputLabel value="RDHS Division" ></h:outputLabel>
-                            <p:autoComplete id="acRdhs"
+                            <p:autoComplete id="acRdhs" converter="areaCon"
                                             value="#{ckdRecordController.rdhsArea}"
                                             completeMethod="#{areaController.completeRdhsArea}"
                                             var="rdhs"
@@ -62,7 +62,7 @@
                                 <h:panelGroup >
                                     <p:autoComplete value="#{ckdRecordController.occupation}"
                                                     completeMethod="#{occupationController.completeOccupation}"
-                                                    var="occ"
+                                                    var="occ" converter="occupationCon"
                                                     id="acOcc"
                                                     itemLabel="#{occ.name}"
                                                     itemValue="#{occ}"
@@ -83,7 +83,7 @@
                             </h:panelGroup>
 
                             <h:outputLabel value="MOH Area"></h:outputLabel>
-                            <p:autoComplete id="acMoh"
+                            <p:autoComplete id="acMoh"  converter="areaCon"
                                             value="#{ckdRecordController.rdhsArea}"
                                             completeMethod="#{areaController.completeMohArea}"
                                             var="moh"
@@ -92,7 +92,7 @@
                             </p:autoComplete>
 
                             <h:outputLabel value="PHI Area"></h:outputLabel>
-                            <p:autoComplete id="acPhi"
+                            <p:autoComplete id="acPhi"  converter="areaCon"
                                             value="#{ckdRecordController.rdhsArea}"
                                             completeMethod="#{areaController.completeMohArea}"
                                             var="moh"
@@ -107,7 +107,7 @@
                                 <h:panelGroup >
                                     <p:autoComplete value="#{ckdRecordController.coormobidity}"
                                                     completeMethod="#{diagnosisController.completeDx}"
-                                                    var="cm"
+                                                    var="cm" converter="dxCon"
                                                     id="acCm"
                                                     itemLabel="#{cm.name}"
                                                     itemValue="#{cm}"
@@ -130,7 +130,7 @@
                             <h:outputLabel value="Diagnosis"></h:outputLabel>
                             <p:autoComplete value="#{ckdRecordController.current.diagnosis}"
                                             completeMethod="#{diagnosisController.completeDx}"
-                                            var="dx"
+                                            var="dx"  converter="dxCon"
                                             id="acDx"
                                             itemLabel="#{dx.name}"
                                             itemValue="#{dx}"

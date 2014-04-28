@@ -46,7 +46,6 @@ public class Item implements Serializable {
     String name;
     String sname;
     String tname;
-    @Column(unique = true, nullable = false)   
     String code;
     
     String printName;

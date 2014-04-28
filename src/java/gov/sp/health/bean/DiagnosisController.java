@@ -2,7 +2,6 @@ package gov.sp.health.bean;
 
 import gov.sp.health.data.StaffRole;
 
-
 import org.primefaces.model.map.MapModel;
 import gov.sp.health.facade.GisCoordinateFacade;
 import gov.sp.health.facade.ItemFacade;
@@ -26,7 +25,6 @@ import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
 
-
 @Named
 @SessionScoped
 public class DiagnosisController implements Serializable {
@@ -43,7 +41,7 @@ public class DiagnosisController implements Serializable {
     private List<Diagnosis> items = null;
     String selectText = "";
     String bulkText = "";
-    
+
     @EJB
     GisCoordinateFacade gisCoordinateFacade;
     MapModel familyMapModel;
@@ -57,8 +55,6 @@ public class DiagnosisController implements Serializable {
     public void setGisCoordinateFacade(GisCoordinateFacade gisCoordinateFacade) {
         this.gisCoordinateFacade = gisCoordinateFacade;
     }
-    
-    
 
     public List<Diagnosis> getStaffRoleForms(StaffRole sr) {
         Map m = new HashMap();
@@ -89,7 +85,6 @@ public class DiagnosisController implements Serializable {
         }
         return suggestions;
     }
-    
 
     public List<Diagnosis> completeInvest(String query) {
         List<Diagnosis> suggestions;
@@ -118,15 +113,6 @@ public class DiagnosisController implements Serializable {
         return suggestions;
     }
 
-
-
-   
-
-  
-
-  
-
-  
     public List<Diagnosis> getSelectedItems() {
         if (selectText.trim().equals("")) {
             selectedItems = getEjbFacade().findBySQL("select c from Diagnosis  c where c.retired=false order by c.name");
@@ -136,13 +122,10 @@ public class DiagnosisController implements Serializable {
         return selectedItems;
     }
 
-   
-
     public void prepareAdd() {
         current = new Diagnosis();
     }
 
-    
     public void setSelectedItems(List<Diagnosis> selectedItems) {
         this.selectedItems = selectedItems;
     }
@@ -156,23 +139,16 @@ public class DiagnosisController implements Serializable {
     }
 
     public void saveSelected() {
-
-
         if (getCurrent().getId() != null && getCurrent().getId() > 0) {
             System.out.println("1");
-           
-           
             getEjbFacade().edit(getCurrent());
-            UtilityController.addSuccessMessage("updated Successfully");
+            UtilityController.addSuccessMessage("Updated Successfully");
         } else {
             System.out.println("4");
             getCurrent().setCreatedAt(Calendar.getInstance(TimeZone.getTimeZone("IST")).getTime());
             getCurrent().setCreater(sessionController.getLoggedUser());
             getEjbFacade().create(getCurrent());
-            
-            
-            getEjbFacade().edit(getCurrent());
-            UtilityController.addSuccessMessage("saved Successfully");
+            UtilityController.addSuccessMessage("Saved Successfully");
         }
         recreateModel();
         getItems();
@@ -211,8 +187,7 @@ public class DiagnosisController implements Serializable {
     public void setCurrent(Diagnosis current) {
         this.current = current;
         if (current != null) {
-            
-           
+
         }
     }
 
@@ -249,7 +224,7 @@ public class DiagnosisController implements Serializable {
     /**
      *
      */
-    @FacesConverter("dxcon")
+    @FacesConverter("dxCon")
     public static class DiagnosisConverter implements Converter {
 
         public DiagnosisConverter() {

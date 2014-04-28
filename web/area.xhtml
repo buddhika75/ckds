@@ -56,6 +56,7 @@
 
                                     <p:outputLabel value="Parent Area" ></p:outputLabel>
                                     <p:autoComplete id="acArea"
+                                                    converter="areaCon"
                                                     value="#{areaController.current.superArea}"
                                                     completeMethod="#{areaController.completeArea}"
                                                     var="a"
