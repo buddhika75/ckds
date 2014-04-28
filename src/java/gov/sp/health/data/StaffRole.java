@@ -14,4 +14,7 @@ public enum StaffRole {
     Fhb,
     Gn,
     Admin,
+    CCP,
+    Management_Assistant,
+    Development_assistant,
 }

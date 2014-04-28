@@ -57,7 +57,7 @@ public class AreaController implements Serializable {
         Map m = new HashMap();
         m.put("n", "%" + qry.toUpperCase() + "%");
         m.put("at", at);
-        return getFacade().findBySQL("select c from Area c where c.retired=false and upper(c.name) like :n and c.areaType=:at order by c.name");
+        return getFacade().findBySQL("select c from Area c where c.retired=false and upper(c.name) like :n and c.areaType=:at order by c.name",m);
 
     }
 

@@ -9,6 +9,7 @@ package gov.sp.health.bean;
 import gov.sp.health.data.AreaType;
 import gov.sp.health.data.InstitutionType;
 import gov.sp.health.data.Sex;
+import gov.sp.health.data.StaffRole;
 import javax.inject.Named;
 import javax.enterprise.context.ApplicationScoped;
 
@@ -37,4 +38,8 @@ public class EnumController {
         return AreaType.values();
     }
     
+    
+    public StaffRole[] getStaffRoles(){
+        return StaffRole.values();
+    }
 }

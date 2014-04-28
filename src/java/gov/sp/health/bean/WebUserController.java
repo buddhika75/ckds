@@ -116,15 +116,23 @@ public class WebUserController implements Serializable {
                 at = AreaType.District;
                 break;
             case Admin:
-                at = AreaType.Province;
+                at = AreaType.Country;
                 break;
             case Eu:
-                at = AreaType.District;
+                at = AreaType.Country;
                 break;
             case Fhb:
-                at = AreaType.District;
+                at = AreaType.Country;
                 break;
-
+            case CCP:
+                at = AreaType.Country;
+                break;
+            case Development_assistant:
+            case Management_Assistant:
+                at = AreaType.Province;
+                break;
+            default:
+                at =AreaType.Country;
 
         }
         String s = "Select a from Area a where a.retired=false and a.areaType=:at order by a.name";
@@ -179,7 +187,6 @@ public class WebUserController implements Serializable {
         removingUser.getWebUserPerson().setRetirer(getSessionController().getLoggedUser());
         removingUser.getWebUserPerson().setRetiredAt(Calendar.getInstance().getTime());
         getPersonFacade().edit(removingUser.getWebUserPerson());
-
 
         removingUser.setRetired(true);
         removingUser.setRetirer(getSessionController().getLoggedUser());
