@@ -3,9 +3,12 @@ package gov.sp.health.bean;
 import gov.sp.health.entity.Area;
 import gov.sp.health.entity.CkdRecord;
 import gov.sp.health.entity.Diagnosis;
+import gov.sp.health.entity.GisCoordinate;
 import gov.sp.health.entity.Institution;
 import gov.sp.health.entity.Occupation;
 import gov.sp.health.entity.Person;
+import gov.sp.health.entity.RecordCormorbidity;
+import gov.sp.health.entity.RecordOccupation;
 import gov.sp.health.facade.CkdRecordFacade;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -19,8 +22,13 @@ import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
+import javax.faces.event.ActionEvent;
 import javax.inject.Inject;
 import javax.inject.Named;
+import org.primefaces.model.map.DefaultMapModel;
+import org.primefaces.model.map.LatLng;
+import org.primefaces.model.map.MapModel;
+import org.primefaces.model.map.Marker;
 
 @Named
 @SessionScoped
@@ -43,6 +51,22 @@ public class CkdRecordController implements Serializable {
     Occupation occupation;
     Diagnosis diagnosis;
     Diagnosis coormobidity;
+    private String title;
+
+    public String getTitle() {
+        title = getCurrent().getClinicRegistrationNumber();
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    private MapModel emptyModel;
+
+    private double lat;
+
+    private double lng;
 
     public void addOccupation() {
         if (current == null) {
@@ -52,9 +76,12 @@ public class CkdRecordController implements Serializable {
             return;
         }
         if (current.getOccupations() == null) {
-            current.setOccupations(new ArrayList<Occupation>());
+            current.setOccupations(new ArrayList<RecordOccupation>());
         }
-        current.getOccupations().add(occupation);
+        RecordOccupation ro = new RecordOccupation();
+        ro.setCkdRecord(current);
+        ro.setOccupation(occupation);
+        current.getOccupations().add(ro);
         occupation = null;
         UtilityController.addSuccessMessage("Occupation Added");
     }
@@ -66,17 +93,17 @@ public class CkdRecordController implements Serializable {
         if (coormobidity == null) {
             return;
         }
-        if (current.getComorbidities() == null) {
-            current.setComorbidities(new ArrayList<Diagnosis>());
+        if (current.getCormorbidities() == null) {
+            current.setCormorbidities(new ArrayList<RecordCormorbidity>());
         }
-        current.getComorbidities().add(coormobidity);
+        RecordCormorbidity rc = new RecordCormorbidity();
+        rc.setCkdRecord(current);
+        rc.setDiagnosis(coormobidity);
+        current.getCormorbidities().add(rc);
         coormobidity = null;
         UtilityController.addSuccessMessage("Coormorbidity Added");
     }
 
-                                                         
-
-    
     public List<CkdRecord> getSelectedItems() {
         selectedItems = getFacade().findBySQL("select c from CkdRecord c where c.retired=false and upper(c.name) like '%" + getSelectText().toUpperCase() + "%' order by c.name");
         return selectedItems;
@@ -93,8 +120,9 @@ public class CkdRecordController implements Serializable {
         return a;
     }
 
-    public void prepareAdd() {
-        current = new CkdRecord();
+    public String prepareAdd() {
+        prepareNew();
+        return "add_record";
     }
 
     public void setSelectedItems(List<CkdRecord> selectedItems) {
@@ -120,10 +148,17 @@ public class CkdRecordController implements Serializable {
             getFacade().create(current);
             UtilityController.addSuccessMessage("saved Successfully");
         }
+
+        for (RecordCormorbidity rc : current.getCormorbidities()) {
+            if (rc.getId() == null) {
+
+            }
+        }
+
         recreateModel();
         getItems();
     }
-    
+
     public String saveAndAddGis() {
         if (getCurrent().getId() != null && getCurrent().getId() > 0) {
             getFacade().edit(current);
@@ -154,15 +189,62 @@ public class CkdRecordController implements Serializable {
     }
 
     public CkdRecordController() {
+        emptyModel = new DefaultMapModel();
+    }
+
+    public MapModel getEmptyModel() {
+        return emptyModel;
+    }
+
+    public void setEmptyModel(MapModel emptyModel) {
+        this.emptyModel = emptyModel;
+    }
+
+    public double getLat() {
+        
+        lat = getCurrent().getGisCoordinate().getLatitude();
+        return lat;
+    }
+
+    public void setLat(double lat) {
+        getCurrent().getGisCoordinate().setLatitude(lat);
+        this.lat = lat;
+    }
+
+    public double getLng() {
+        lng = getCurrent().getGisCoordinate().getLongtide();
+        return lng;
+    }
+
+    public void setLng(double lng) {
+        this.lng = lng;
+        getCurrent().getGisCoordinate().setLongtide(lng);
+    }
+
+    public void addMarker(ActionEvent actionEvent) {
+        System.out.println("adding marker = " + actionEvent.toString());
+        if (getCurrent() == null) {
+            UtilityController.addErrorMessage("Record?");
+            return;
+        }
+        Marker marker = new Marker(new LatLng(getLat(), getLng()), title);
+        emptyModel.addOverlay(marker);
+        UtilityController.addSuccessMessage("Marker Added");
     }
 
     public CkdRecord getCurrent() {
         if (current == null) {
-            current = new CkdRecord();
-            Person person = new Person();
-            current.setPerson(person);
+            prepareNew();
         }
         return current;
+    }
+
+    private void prepareNew() {
+        current = new CkdRecord();
+        current.setCormorbidities(new ArrayList<RecordCormorbidity>());
+        current.setOccupations(new ArrayList<RecordOccupation>());
+        current.setPerson(new Person());
+        current.setGisCoordinate(new GisCoordinate());
     }
 
     public void setCurrent(CkdRecord current) {
@@ -249,20 +331,20 @@ public class CkdRecordController implements Serializable {
         this.phiArea = phiArea;
     }
 
-    public Occupation getOccupation() {
-        return occupation;
-    }
-
-    public void setOccupation(Occupation occupation) {
-        this.occupation = occupation;
-    }
-
     public Diagnosis getDiagnosis() {
         return diagnosis;
     }
 
     public void setDiagnosis(Diagnosis diagnosis) {
         this.diagnosis = diagnosis;
+    }
+
+    public Occupation getOccupation() {
+        return occupation;
+    }
+
+    public void setOccupation(Occupation occupation) {
+        this.occupation = occupation;
     }
 
     public Diagnosis getCoormobidity() {

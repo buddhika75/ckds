@@ -40,7 +40,7 @@
                             </p:ajaxStatus>
                             <p:menubar styleClass="nonPrintBlock" style=" border: 0px;" rendered="#{sessionController.logged}" >
                                 <p:submenu label="Data"  >
-                                    <p:menuitem  ajax="false" action="add_record" value="Add New Record"  ></p:menuitem>
+                                    <p:menuitem  ajax="false" action="#{ckdRecordController.prepareAdd}" value="Add New Record"  ></p:menuitem>
                                 </p:submenu>
                                 <p:submenu label="User"  >
                                     <p:menuitem  ajax="false"  action="user_change_password" value="Change Password"  ></p:menuitem>

@@ -16,7 +16,6 @@ import javax.persistence.Id;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 
 /**
@@ -36,8 +35,6 @@ public class CkdRecord implements Serializable {
     String nic;
     @ManyToOne(cascade = CascadeType.ALL)
     Person person;
-    @OneToMany
-    List<Occupation> occupations;
     @ManyToOne
     Area rdhsArea;
     int caseYear;
@@ -46,14 +43,16 @@ public class CkdRecord implements Serializable {
     Area mohArea;
     @ManyToOne
     Area phiArea;
-    @OneToMany
-    List<Diagnosis> comorbidities;
     @ManyToOne
     Diagnosis diagnosis;
+    @OneToMany(cascade = CascadeType.ALL)
+    List<RecordOccupation> occupations;
+    @OneToMany(cascade = CascadeType.ALL)
+    List<RecordCormorbidity> cormorbidities;
 
     @Temporal(javax.persistence.TemporalType.DATE)
     Date recordDate;
-    
+
     @ManyToOne
     WebUser creater;
     @Temporal(javax.persistence.TemporalType.DATE)
@@ -68,7 +67,8 @@ public class CkdRecord implements Serializable {
     Date retiredAt;
     @Lob
     String retiredComments;
-
+    
+     
     public Long getId() {
         return id;
     }
@@ -109,14 +109,6 @@ public class CkdRecord implements Serializable {
         this.person = person;
     }
 
-    public List<Occupation> getOccupations() {
-        return occupations;
-    }
-
-    public void setOccupations(List<Occupation> occupations) {
-        this.occupations = occupations;
-    }
-
     public Area getRdhsArea() {
         return rdhsArea;
     }
@@ -155,14 +147,6 @@ public class CkdRecord implements Serializable {
 
     public void setPhiArea(Area phiArea) {
         this.phiArea = phiArea;
-    }
-
-    public List<Diagnosis> getComorbidities() {
-        return comorbidities;
-    }
-
-    public void setComorbidities(List<Diagnosis> comorbidities) {
-        this.comorbidities = comorbidities;
     }
 
     public WebUser getCreater() {
@@ -213,9 +197,6 @@ public class CkdRecord implements Serializable {
         this.retiredAt = retiredAt;
     }
 
-
-    
-    
     public String getRetiredComments() {
         return retiredComments;
     }
@@ -239,8 +220,26 @@ public class CkdRecord implements Serializable {
     public void setDiagnosis(Diagnosis diagnosis) {
         this.diagnosis = diagnosis;
     }
-    
 
+    public List<RecordOccupation> getOccupations() {
+        return occupations;
+    }
+
+    public void setOccupations(List<RecordOccupation> occupations) {
+        this.occupations = occupations;
+    }
+
+    public List<RecordCormorbidity> getCormorbidities() {
+        return cormorbidities;
+    }
+
+    public void setCormorbidities(List<RecordCormorbidity> cormorbidities) {
+        this.cormorbidities = cormorbidities;
+    }
+
+    
+    
+    
     @ManyToOne(cascade = CascadeType.ALL)
     GisCoordinate gisCoordinate;
 
@@ -251,8 +250,6 @@ public class CkdRecord implements Serializable {
     public void setGisCoordinate(GisCoordinate gisCoordinate) {
         this.gisCoordinate = gisCoordinate;
     }
-    
-    
 
     @Override
     public int hashCode() {

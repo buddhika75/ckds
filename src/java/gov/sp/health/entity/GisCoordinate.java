@@ -37,6 +37,9 @@ public class GisCoordinate implements Serializable {
     
     
     public double getLongtide() {
+        if(longtide==0){
+            longtide = 80.535;
+        }
         return longtide;
     }
 
@@ -45,6 +48,9 @@ public class GisCoordinate implements Serializable {
     }
 
     public double getLatitude() {
+        if(latitude==0){
+            latitude = 5.949;
+        }
         return latitude;
     }
 

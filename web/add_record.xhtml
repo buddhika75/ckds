@@ -67,9 +67,9 @@
                                                     itemLabel="#{occ.name}"
                                                     itemValue="#{occ}"
                                                     forceSelection="true"></p:autoComplete>
-                                    <p:commandButton value="Add" id="btnAddOcc"
-                                                     process="acOcc"
-                                                     update="tblOcc" 
+                                    <p:commandButton  value="Add" id="btnAddOcc"
+                                                     process="acOcc btnAddOcc"
+                                                     update="tblOcc acOcc" 
                                                      action="#{ckdRecordController.addOccupation()}">
                                     </p:commandButton>
                                 </h:panelGroup>
@@ -77,7 +77,7 @@
                                     <p:dataTable id="tblOcc" value="#{ckdRecordController.current.occupations}" 
                                                  var="ptOcc" >
                                         <p:column >
-                                            <h:outputLabel value="#{ptOcc.name}" ></h:outputLabel>
+                                            <h:outputLabel value="#{ptOcc.occupation.name}" ></h:outputLabel>
                                         </p:column>
                                     </p:dataTable>
                                 </h:panelGroup>
@@ -95,10 +95,10 @@
                             <h:outputLabel value="PHI Area"></h:outputLabel>
                             <p:autoComplete id="acPhi"  converter="areaCon"
                                             value="#{ckdRecordController.rdhsArea}"
-                                            completeMethod="#{areaController.completeMohArea}"
-                                            var="moh"
-                                            itemLabel="#{moh.name}"
-                                            itemValue="#{moh}" >
+                                            completeMethod="#{areaController.completePhiArea}"
+                                            var="phi"
+                                            itemLabel="#{phi.name}"
+                                            itemValue="#{phi}" >
                             </p:autoComplete>
 
 
@@ -113,16 +113,16 @@
                                                     itemLabel="#{cm.name}"
                                                     itemValue="#{cm}"
                                                     forceSelection="true"></p:autoComplete>
-                                    <p:commandButton value="Add" id="btnAddDx"
-                                                     process="acCm"
-                                                     update="tblCm" >
+                                    <p:commandButton value="Add" id="btnAddDx" action="#{ckdRecordController.addComorbidities}"
+                                                     process="acCm btnAddDx"
+                                                     update="tblCm acCm" >
                                     </p:commandButton>
                                 </h:panelGroup>
                                 <h:panelGroup >
-                                    <p:dataTable id="tblCm" value="#{ckdRecordController.current.occupations}" 
+                                    <p:dataTable id="tblCm" value="#{ckdRecordController.current.cormorbidities}" 
                                                  var="ptCm" >
                                         <p:column >
-                                            <h:outputLabel value="#{ptDx.name}" ></h:outputLabel>
+                                            <h:outputLabel value="#{ptCm.diagnosis.name}" ></h:outputLabel>
                                         </p:column>
                                     </p:dataTable>
                                 </h:panelGroup>
