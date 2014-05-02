@@ -1,0 +1,81 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <body>
+
+        <ui:composition template="./resources/template/template.xhtml">
+
+            <ui:define name="content">
+            
+                <h:form >
+                    <p:panel >
+                        <f:facet name="header" >
+                            <h:outputLabel value="Chronic Kidney Disease Register" >
+                            </h:outputLabel>
+                            <p:commandButton ajax="false" action="#{ckdRecordController.listCasesByMonth()}" value="Fill" ></p:commandButton>
+                        </f:facet>
+                        <p:panelGrid columns="6" >
+                            <h:outputLabel value="RDHS Division" ></h:outputLabel>
+                            <p:autoComplete id="acRdhs" converter="areaCon"
+                                            value="#{ckdRecordController.rdhsArea}"
+                                            completeMethod="#{areaController.completeRdhsArea}"
+                                            var="rdhs"
+                                            itemLabel="#{rdhs.name}"
+                                            itemValue="#{rdhs}" >
+                            </p:autoComplete>
+                            
+                            <h:outputLabel value="From" ></h:outputLabel>
+                            <p:calendar value="#{ckdRecordController.fromDate }" pattern="dd MMMM yyyy" ></p:calendar>
+                            
+                            <h:outputLabel value="To" ></h:outputLabel>
+                            <p:calendar value="#{ckdRecordController.recordDate}" pattern="dd MMMM yyyy" ></p:calendar>
+                            
+                            
+                            <h:outputLabel value="Institution" ></h:outputLabel>
+                            <p:selectOneMenu value="#{ckdRecordController.institution}" >
+                                <f:selectItem itemLabel="Select Institution" ></f:selectItem>
+                                <f:selectItems value="#{institutionController.items}" var="ins" itemLabel="#{ins.name}" itemValue="#{ins}" ></f:selectItems>
+                            </p:selectOneMenu>
+                        </p:panelGrid>
+
+                        
+                        <p:dataTable value="#{ckdRecordController.items}" var="r"  rowIndexVar="ri">
+                            <p:column headerText="Serial No." >
+                                <h:outputLabel value="#{ri + 1}" ></h:outputLabel>
+                            </p:column>
+                            <p:column headerText="Clinic Register No." >
+                                <h:outputLabel value="#{r.clinicRegistrationNumber}" ></h:outputLabel>
+                            </p:column>
+                             <p:column headerText="New/Old Case" >
+                                 <h:outputLabel value="#{r.newCase ?'New':'Old'}" ></h:outputLabel>
+                            </p:column>
+                            <p:column headerText="Name" >
+                                <h:outputLabel value="#{r.person.name}" ></h:outputLabel>
+                            </p:column>
+                            <p:column headerText="Age" >
+                                <h:outputLabel value="#{r.person.age}" ></h:outputLabel>
+                            </p:column>
+                            <p:column headerText="Sex" >
+                                <h:outputLabel value="#{r.person.sex}" ></h:outputLabel>
+                            </p:column>
+                            
+                        </p:dataTable>
+
+                    </p:panel>
+
+                </h:form>
+                
+                
+                
+                
+            </ui:define>
+
+        </ui:composition>
+
+    </body>
+</html>

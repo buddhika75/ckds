@@ -67,6 +67,27 @@ public class CkdRecord implements Serializable {
     Date retiredAt;
     @Lob
     String retiredComments;
+    boolean bxDone;
+    @Lob
+    String comments;
+
+    public boolean isBxDone() {
+        return bxDone;
+    }
+
+    public void setBxDone(boolean bxDone) {
+        this.bxDone = bxDone;
+    }
+
+    public String getComments() {
+        return comments;
+    }
+
+    public void setComments(String comments) {
+        this.comments = comments;
+    }
+    
+    
     
      
     public Long getId() {

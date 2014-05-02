@@ -14,7 +14,9 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.TimeZone;
 import javax.ejb.EJB;
 import javax.enterprise.context.SessionScoped;
@@ -25,6 +27,7 @@ import javax.faces.convert.FacesConverter;
 import javax.faces.event.ActionEvent;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.persistence.TemporalType;
 import org.primefaces.model.map.DefaultMapModel;
 import org.primefaces.model.map.LatLng;
 import org.primefaces.model.map.MapModel;
@@ -52,6 +55,19 @@ public class CkdRecordController implements Serializable {
     Diagnosis diagnosis;
     Diagnosis coormobidity;
     private String title;
+    Date fromDate;
+    Date toDate;
+
+    public void listCasesByMonth() {
+        String sql;
+        Map m = new HashMap();
+        m.put("fd", fromDate);
+        m.put("td", toDate);
+        CkdRecord c = new CkdRecord();
+        c.getRecordDate();
+        sql = "select r from CkdRecord r where r.retired=false and r.recordDate between :fd and :td ";
+        items = getFacade().findBySQL(sql, m, TemporalType.DATE);
+    }
 
     public String getTitle() {
         title = getCurrent().getClinicRegistrationNumber();
@@ -201,7 +217,7 @@ public class CkdRecordController implements Serializable {
     }
 
     public double getLat() {
-        
+
         lat = getCurrent().getGisCoordinate().getLatitude();
         return lat;
     }
@@ -279,7 +295,6 @@ public class CkdRecordController implements Serializable {
     }
 
     public List<CkdRecord> getItems() {
-        items = getFacade().findAll("name", true);
         return items;
     }
 
@@ -353,6 +368,22 @@ public class CkdRecordController implements Serializable {
 
     public void setCoormobidity(Diagnosis coormobidity) {
         this.coormobidity = coormobidity;
+    }
+
+    public Date getFromDate() {
+        return fromDate;
+    }
+
+    public void setFromDate(Date fromDate) {
+        this.fromDate = fromDate;
+    }
+
+    public Date getToDate() {
+        return toDate;
+    }
+
+    public void setToDate(Date toDate) {
+        this.toDate = toDate;
     }
 
     /**
